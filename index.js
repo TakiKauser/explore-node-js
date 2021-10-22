@@ -4,12 +4,8 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use(cors());
+app.use(express.json());
 
-/* 
-const handler = (req, res) => {
-    res.send("Hye");
-}
- */
 app.get('/', (req, res) => {
     res.send("Hye, there. I'm learning Node & Express! It's Exciting!!!");
 });
@@ -27,6 +23,7 @@ const users = [
 
 app.get('/users', (req, res) => {
     const search = (req.query.search);
+    // use query parameter
     if (search) {
         const searchResult = users.filter(user => user.name.toLocaleLowerCase().includes(search));
         res.send(searchResult);
@@ -36,6 +33,18 @@ app.get('/users', (req, res) => {
     }
 });
 
+// app.method
+app.post("/users", (req, res) => {
+    const newUser = req.body;
+    newUser.id = users.length;
+    users.push(newUser);
+    // console.log("Hitting POST", req.body);
+    // res.send(JSON.stringify(newUser));
+    res.json(newUser);
+
+})
+
+// dynamic api
 app.get('/user/:id', (req, res) => {
     const id = req.params.id;
     const user = users[id];
